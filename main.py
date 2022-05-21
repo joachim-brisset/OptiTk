@@ -1,4 +1,4 @@
-from tkinter import Label
+from tkinter import W, Label
 import numpy as np
 
 
@@ -54,7 +54,8 @@ def main(cheat):
             self._stock_secu = []
 
             if not lpresult:
-                FirstPage(self._container, self)
+                stage = FirstPage(self._container, self)
+                stage.pack(fill=tk.BOTH)
             else:
                 import numpy as np
                 self._nbQuality = 4
@@ -100,19 +101,25 @@ def main(cheat):
 
     class FirstPage(tk.Frame):
         def __init__(self, parent, app : App):
-            tk.Frame.__init__(self, parent)
-            self.pack()
-
+            super().__init__(parent)
             self.app = app
 
-            self.ent_nbQuality = tk.Entry(self)
-            self.ent_nbQuality.pack()
+            self._container = tk.Frame(self)
+            self._container.grid(row=0, column=1)
+            self.columnconfigure([0,1], weight=1)
 
-            self.ent_nbMill = tk.Entry(self)
-            self.ent_nbMill.pack()
+            self.ent_nbQuality = tk.Entry(self._container)
+            lbl_nbQuality = tk.Label(self._container, text="Nombre de qualité de béton : ")
+            lbl_nbQuality.grid(row=0,column=0, sticky="w")
+            self.ent_nbQuality.grid(row=0, column=1, sticky="e")
 
-            self._btn_next = tk.Button(self, text="Suivant", command=self.next)
-            self._btn_next.pack()
+            self.ent_nbMill = tk.Entry(self._container)
+            lbl_nbMill = tk.Label(self._container, text="Nombre de broyeur à béton : ")
+            lbl_nbMill.grid(row=1,column=0, sticky="w")
+            self.ent_nbMill.grid(row=1, column=1, sticky="e")
+
+            self._btn_next = tk.Button(self._container, text="Suivant", command=self.next)
+            self._btn_next.grid(row=3, column=1)
 
             
         def next(self):
@@ -127,20 +134,34 @@ def main(cheat):
 
             self.destroy()
 
-            SecondPage(self.app.container(), self.app)
+            stage = SecondPage(self.app.container(), self.app)
+            stage.pack()
         
     class SecondPage(tk.Frame):
         def __init__(self, parent, app : App):
-            tk.Frame.__init__(self, parent)
-            self.pack()
+            super().__init__(parent)
             self.app = app
 
-            frm_matrix = tk.Frame(self)
-            frm_matrix.pack()
+            self._container = tk.Frame(self)
+            self._container.grid(row=0, column=1)
+            self.columnconfigure(0, weight=1)
+            self.columnconfigure(1, weight=2)
+
+            lbl_prod = tk.Label(self._container, text="Production")
+            lbl_prod.grid(row=0,column=0, sticky="nswe")
+
+            lbl_quality = tk.Label(self._container, text="qualité")
+            lbl_quality.grid(row=0,column=1, sticky="we")
+
+            lbl_mill = tk.Label(self._container, text="broyeur")
+            lbl_mill.grid(row=1,column=0, sticky="ns")
+
+            frm_matrix = tk.Frame(self._container)
+            frm_matrix.grid(row=1, column=1)
             self.ents = createEntryMatrix(frm_matrix, app.nbMill(), app.nbQuality())
 
-            self._btn_next = tk.Button(self, text="Suivant", command=self.next)
-            self._btn_next.pack()
+            self._btn_next = tk.Button(self._container, text="Suivant", command=self.next)
+            self._btn_next.grid(row=3, column=1)
 
         def next(self):
             try:
@@ -157,20 +178,34 @@ def main(cheat):
             
             self.destroy()
 
-            ThirdPage(self.app.container(), self.app)
+            stage = ThirdPage(self.app.container(), self.app)
+            stage.pack()
         
     class ThirdPage(tk.Frame):
         def __init__(self, parent, app : App):
-            tk.Frame.__init__(self, parent)
-            self.pack()
+            super().__init__(parent)
             self.app = app
 
-            frm_matrix = tk.Frame(self)
-            frm_matrix.pack()
+            self._container = tk.Frame(self)
+            self._container.grid(row=0, column=1)
+            self.columnconfigure(0, weight=1)
+            self.columnconfigure(1, weight=2)
+
+            lbl_cost = tk.Label(self._container, text="Cout par production")
+            lbl_cost.grid(row=0,column=0, sticky="nswe")
+
+            lbl_quality = tk.Label(self._container, text="qualité")
+            lbl_quality.grid(row=0,column=1, sticky="we")
+
+            lbl_mill = tk.Label(self._container, text="broyeur")
+            lbl_mill.grid(row=1,column=0, sticky="ns")
+
+            frm_matrix = tk.Frame(self._container)
+            frm_matrix.grid(row=1, column=1)
             self.ents = createEntryMatrix(frm_matrix, app.nbMill(), app.nbQuality())
 
-            self._btn_next = tk.Button(self, text="Suivant", command=self.next)
-            self._btn_next.pack()
+            self._btn_next = tk.Button(self._container, text="Suivant", command=self.next)
+            self._btn_next.grid(row=3, column=1)
 
         def next(self):
             try:
@@ -187,29 +222,45 @@ def main(cheat):
             
             self.destroy()
 
-            FourthPage(self.app.container(), self.app)
+            stage = FourthPage(self.app.container(), self.app)
+            stage.pack()
     
     class FourthPage(tk.Frame):
         def __init__(self, parent, app : App):
-            tk.Frame.__init__(self, parent)
-            self.pack()
+            super().__init__(parent)
             self.app = app
 
-            frm_matrix = tk.Frame(self)
-            frm_matrix.pack()
+            self._container = tk.Frame(self)
+            self._container.grid(row=0, column=1)
+            self.columnconfigure(0, weight=1)
+            self.columnconfigure(1, weight=2)
 
-            frm_matrix1 = tk.Frame(frm_matrix)
-            frm_matrix1.pack()
+            lbl_stck = tk.Label(self._container, text="Stocks")
+            lbl_stck.grid(row=0,column=0, sticky="nswe")
+
+            lbl_quality = tk.Label(self._container, text="qualité")
+            lbl_quality.grid(row=0,column=1, sticky="we")
+
+            lbl_stcki = tk.Label(self._container, text="Stock initial")
+            lbl_stcki.grid(row=1,column=0, sticky="nswe")
+            frm_matrix1 = tk.Frame(self._container)
+            frm_matrix1.grid(row=1, column=1)
             self.ents1 = createEntryMatrix(frm_matrix1, 1, app.nbQuality())
-            frm_matrix2 = tk.Frame(frm_matrix)
-            frm_matrix2.pack()
+            
+            lbl_stcko = tk.Label(self._container, text="Stock commandé")
+            lbl_stcko.grid(row=2,column=0, sticky="nswe")
+            frm_matrix2 = tk.Frame(self._container)
+            frm_matrix2.grid(row=2, column=1)
             self.ents2 = createEntryMatrix(frm_matrix2, 1, app.nbQuality())
-            frm_matrix3 = tk.Frame(frm_matrix)
-            frm_matrix3.pack()
+            
+            lbl_stcks = tk.Label(self._container, text="Stock de secu")
+            lbl_stcks.grid(row=3,column=0, sticky="nswe")
+            frm_matrix3 = tk.Frame(self._container)
+            frm_matrix3.grid(row=3, column=1)
             self.ents3 = createEntryMatrix(frm_matrix3, 1, app.nbQuality())
 
-            self._btn_next = tk.Button(self, text="Suivant", command=self.next)
-            self._btn_next.pack()
+            self._btn_next = tk.Button(self._container, text="Suivant", command=self.next)
+            self._btn_next.grid(row=5, column=1)
 
         def next(self):
             try:
